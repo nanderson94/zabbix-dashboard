@@ -1,0 +1,87 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-rendering: optimizelegibility;
+  color: #333;
+
+}
+#container {
+  min-height: 300px;
+  width: 960px;
+  margin: 15px auto;
+  padding: 10px;
+  border-radius:3px;
+  background-color: white;
+  font-family: sans-serif;
+}
+#header h1 {
+  margin: 0;
+  padding: 0;
+  font-size:4rem;
+  font-weight: normal;
+  display: inline-block;
+}
+#status {
+  float:right;
+}
+#status.ok {
+  color: green;
+}
+#status.bad {
+  color: red;
+}
+
+.badge {
+  padding: 3px 8px;
+  border-radius: 3px;
+  width: 80px;
+  display: inline-block;
+  text-align: center;
+  margin-right: 5px;
+}
+.badge-container {
+  width:85px;
+}
+.type-Disaster .badge {
+  background-color: #E45959;
+}
+.type-High .badge {
+  background-color: #E97659;
+}
+.type-Average .badge {
+  background-color: #FFA059;
+}
+.type-Warning .badge {
+  background-color: #FFC859;
+}
+.type-Information .badge {
+  background-color: #7499FF;
+}
+
+#currentAlerts ul {
+  list-style-type: none;
+  padding: 5px;
+  border-radius: 3px;
+  border: 1px #CECECE solid;
+  width: 100%;
+}
+#currentAlerts li {
+  height: 40px;
+  display: table;
+  width: 100%;
+  border-bottom: 1px #CECECE solid;
+}
+#currentAlerts li:last-child {
+  border-bottom: none;
+}
+#currentAlerts li .cell {
+  display: table-cell;
+  vertical-align: middle;
+}
+.ok .smile {
+  display: inline !important;
+}
+.bad .scream {
+  display: inline !important;
+}

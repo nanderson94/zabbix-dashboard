@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SRCT Status</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div id="container">
+    <div id="header">
+      <h1>SRCT Status</h1> 
+      <h1 id="status">
+        <img style="display:none" class="smile" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f600.png?v6">
+        <img style="display:none" class="scream" src="https://assets-cdn.github.com/images/icons/emoji/unicode/1f631.png?v6">
+      </h1>
+    </div>
+
+    <h2>Current Alerts</h2>
+    <div id="currentAlerts">Loading current alerts...</div>
+  </div>
+  <script src="js/main.js"></script>
+  <script>
+var zabbix = new Zabbix("https://monitor.srct.gmu.edu/zabbix/api_jsonrpc.php");
+var priorityMap = {
+  0: "Unknown",
+  1: "Information",
+  2: "Warning",
+  3: "Average",
+  4: "High",
+  5: "Disaster"
+};
+zabbix.login("guest", "", function() {
+  function getData() {
+    zabbix.api("trigger.get", {
+      only_true: true, 
+      monitored: true, 
+      expandDescription: true, 
+      expandComment: true,
+      filter: { value: 1 },
+      sortfield: "priority",
+      sortorder: "DESC"
+    }, function(data) {
+      var elem = document.getElementById("currentAlerts");
+      var msg = "";
+      if (!data.hasOwnProperty("result")) {
+        elem.innerHTML = "Unable to fetch results from Zabbix's API";
+        console.log(data);
+        return;
+      }
+      if (data.result.length === 0) {
+        elem.innerHTML = "Everything's looking swell!";
+        document.getElementById('status').className = "ok";
+        return;
+      }
+      document.getElementById('status').className = "bad";
+      msg += "<ul>";
+      for (var i=0,len=data.result.length; i<len; i++) {
+        var x = data.result[i];
+        var pName = priorityMap[x.priority];
+        msg += '<li class="type-'+pName+'" id="trigger-'+x.triggerid+'"><span class="cell">'+'<span class="badge-container"><span class="badge">'+pName+'</span></span> '+x.description+"</span></li>";
+      }
+      msg += "</ul>";
+      elem.innerHTML = msg;
+      setTimeout(getData, 15000);
+    });
+  }
+  getData();
+});
+  </script>
+</body>
+</html>
